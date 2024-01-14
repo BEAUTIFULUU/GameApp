@@ -1,18 +1,22 @@
 import random
-from prompt_toolkit.validation import ValidationError
 
 first_num = int(input('Select number from 1 to 100: '))
 second_num = int(input('Select number from 1 to 100 bigger than first one: '))
 
 
-def validate_num_range_and_generate_random_num(frst_num: int, scn_num: int) -> int | ValidationError:
+def validate_num_range_and_generate_random_num(frst_num: int, scn_num: int) -> int:
     num_diff = scn_num - frst_num
-    if 1 <= frst_num <= 100 and 1 <= scn_num <= 100 and scn_num > frst_num and num_diff >= 10:
-        print('Given range is valid, generating random number...')
-        random_num = random.randint(frst_num, scn_num)
-        return random_num
+    while True:
+        if 1 <= frst_num <= 100 and 1 <= scn_num <= 100 and scn_num > frst_num and num_diff >= 10:
+            print('Given range is valid, generating random number...')
+            random_num = random.randint(frst_num, scn_num)
+            return random_num
 
-    raise ValidationError(message='Given range is invalid!')
+        else:
+            print('Invalid number range.')
+            frst_num = int(input('Select number from 1 to 100: '))
+            scn_num = int(input('Select number from 1 to 100 bigger than first one: '))
+            continue
 
 
 rnd_num = validate_num_range_and_generate_random_num(frst_num=first_num, scn_num=second_num)
