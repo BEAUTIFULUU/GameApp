@@ -16,11 +16,10 @@ def validate_num_range_and_generate_random_num(frst_num: int, scn_num: int) -> i
 
 
 rnd_num = validate_num_range_and_generate_random_num(frst_num=first_num, scn_num=second_num)
-print(rnd_num)
 
 
 def guess_the_number(num_rng: tuple, random_nm: int, max_guesses: int = 7):
-    print(num_rng)
+    print(f'Numbers range is: {num_rng}.')
     guesses = 0
 
     while True:
@@ -52,7 +51,7 @@ def guess_the_number(num_rng: tuple, random_nm: int, max_guesses: int = 7):
             break
 
         else:
-            raise ValidationError(message='chuj')
+            print('Try again!')
 
 
 guess_the_number(num_rng=(first_num, second_num), random_nm=rnd_num)
