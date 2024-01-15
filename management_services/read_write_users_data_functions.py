@@ -18,9 +18,7 @@ def write_accounts_to_file(
         file.write(f"accounts = {json.dumps(accounts_dict, indent=4)}\n")
 
 
-def read_from_personal_game_records(
-    filename: str = "../users_data/personal_game_records.py",
-):
+def read_from_personal_game_records(filename="../users_data/personal_game_records.py"):
     try:
         personal_game_records = {}
         with open(filename, "r") as file:
@@ -28,3 +26,10 @@ def read_from_personal_game_records(
         return personal_game_records.get("records", {})
     except FileNotFoundError:
         print("Records file not found.")
+
+
+def write_records_to_file(
+    records_dict: dict, filename="../users_data/personal_game_records.py"
+) -> None:
+    with open(filename, "w") as file:
+        file.write(f"records = {json.dumps(records_dict, indent=4)}\n")
