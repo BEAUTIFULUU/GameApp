@@ -1,13 +1,9 @@
 import random
 
-first_num = int(input('Select number from 1 to 100: '))
-second_num = int(input('Select number from 1 to 100 bigger than first one: '))
-
 
 def validate_num_range_and_generate_random_num(frst_num: int, scn_num: int) -> int:
-    num_diff = scn_num - frst_num
     while True:
-        if 1 <= frst_num <= 100 and 1 <= scn_num <= 100 and scn_num > frst_num and num_diff >= 10:
+        if 1 <= frst_num <= 100 and 1 <= scn_num <= 100 and scn_num > frst_num and scn_num - frst_num >= 10:
             print('Given range is valid, generating random number...')
             random_num = random.randint(frst_num, scn_num)
             return random_num
@@ -15,11 +11,7 @@ def validate_num_range_and_generate_random_num(frst_num: int, scn_num: int) -> i
         else:
             print('Invalid number range.')
             frst_num = int(input('Select number from 1 to 100: '))
-            scn_num = int(input('Select number from 1 to 100 bigger than first one: '))
-            continue
-
-
-rnd_num = validate_num_range_and_generate_random_num(frst_num=first_num, scn_num=second_num)
+            scn_num = int(input('Select number from 1 to 100 bigger than the first one: '))
 
 
 def guess_the_number(num_rng: tuple, random_nm: int, max_guesses: int = 7):
@@ -58,4 +50,10 @@ def guess_the_number(num_rng: tuple, random_nm: int, max_guesses: int = 7):
             print('Try again!')
 
 
-guess_the_number(num_rng=(first_num, second_num), random_nm=rnd_num)
+def number_guess_game():
+    first_num = int(input('Select number from 1 to 100: '))
+    second_num = int(input('Select number from 1 to 100 bigger than first one: '))
+
+    rnd_num = validate_num_range_and_generate_random_num(frst_num=first_num, scn_num=second_num)
+    guess_the_number(num_rng=(first_num, second_num), random_nm=rnd_num)
+

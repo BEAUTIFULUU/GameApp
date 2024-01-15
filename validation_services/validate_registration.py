@@ -1,7 +1,3 @@
-import json
-import uuid
-
-
 def read_accounts_from_file(filename='../users_data/accounts.py'):
     try:
         accounts_data = {}
@@ -37,15 +33,15 @@ def validate_username(username: str, accounts_file_dct: dict) -> str | None:
             return username
 
 
-def validate_login(user_login: str, accounts_file_dct: dict) -> str | None:
+def validate_login(user_login: str, accounts_file_dct: dict, username: str) -> str | None:
     while True:
         if len(user_login) not in range(6, 16):
-            print('Invalid password lenght.')
+            print('Invalid password length.')
             user_login = input('Login(must be unique, length(6-16), min. 1 digit): ')
             continue
 
         elif not any(char.isdigit() for char in user_login):
-            print('At least one character must be digit.')
+            print('At least one character must be a digit.')
             user_login = input('Login(must be unique, length(6-16), min. 1 digit): ')
             continue
 
@@ -84,29 +80,3 @@ def validate_password(user_password: str, accounts_file_dct: dict) -> str | None
 
         else:
             return user_password
-
-
-def write_accounts_to_file(accounts_dict: dict, filename='../users_data/accounts.py') -> None:
-    with open(filename, 'w') as file:
-        file.write(f"accounts = {json.dumps(accounts_dict, indent=4)}\n")
-
-
-def register_account(validated_username: str, validated_login: str, validated_password: str) -> None:
-    if validated_login is not None and validated_password is not None:
-        accounts_data = acc_file
-        unique_token = str(uuid.uuid4())
-        accounts_data[validated_username] = {
-            "login": validated_login, "password": validated_password, "token": unique_token}
-        write_accounts_to_file(accounts_data)
-        print(f"Account with login: {validated_login} registered.")
-    else:
-        print("Account registration failed.")
-
-
-username = input('Username(must be unique, length(6-16), min. 2 digits):')
-username_result = validate_username(username=username, accounts_file_dct=acc_file)
-login = input('Login(must be unique, length(6-16), min. 1 digit): ')
-login_result = validate_login(user_login=login, accounts_file_dct=acc_file)
-password = input('Password(must be unique, length(8-20), min 3 digits, min 1 uppercase): ')
-password_result = validate_password(user_password=password, accounts_file_dct=acc_file)
-register_account(validated_username=username_result, validated_login=login_result, validated_password=password_result)
