@@ -12,36 +12,36 @@ pers_game_records = read_from_personal_game_records()
 def start_user_auth() -> str | None:
     while True:
         reload_acc_file = read_accounts_from_file()
-        user_decision_str = input("1 - Login, 2 - Register, 0 - Exit: ")
+        user_decision_str_auth = input("1 - Login, 2 - Register, 0 - Exit: ")
 
-        if not user_decision_str.isdigit():
+        if not user_decision_str_auth.isdigit():
             print("Invalid input. Please enter a number.")
             continue
 
-        user_decision = int(user_decision_str)
+        user_decision_auth = int(user_decision_str_auth)
 
-        if user_decision == 1:
-            username = input("Enter username: ")
+        if user_decision_auth == 1:
+            username_auth = input("Enter username: ")
             password = input("Enter password: ")
             logged = login_into_acc(
-                val_username=username, val_password=password, acc_file=reload_acc_file
+                val_username=username_auth, val_password=password, acc_file=reload_acc_file
             )
             if logged:
-                return username
+                return username_auth
 
-        elif user_decision == 2:
-            username = input("Username(must be unique, lenght(6-16), min. 2 digits): ")
+        elif user_decision_auth == 2:
+            username_auth = input("Username(must be unique, lenght(6-16), min. 2 digits): ")
             login = input("Login(must be unique, length(6-16), min. 1 digit): ")
             password = input(
                 "Password(must be unique, length(8-20), min 3 digits, min 1 uppercase): "
             )
             register_account(
-                validated_username=username,
+                validated_username=username_auth,
                 validated_login=login,
                 validated_password=password,
             )
 
-        elif user_decision == 0:
+        elif user_decision_auth == 0:
             print("Exiting...")
             break
 
