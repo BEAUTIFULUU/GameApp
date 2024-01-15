@@ -1,20 +1,7 @@
 from games.number_guess_game import number_guess_game
 from management_services.login import login_into_acc
-from management_services.read_write_users_data_functions import read_accounts_from_file
+from management_services.read_write_users_data_functions import read_accounts_from_file, read_from_personal_game_records
 from management_services.register_acc import register_account
-
-
-def read_from_personal_game_records(
-    filename: str = "../users_data/personal_game_records.py",
-):
-    try:
-        personal_game_records = {}
-        with open(filename, "r") as file:
-            exec(file.read(), {}, personal_game_records)
-        return personal_game_records.get("records", {})
-    except FileNotFoundError:
-        print("Records file not found.")
-
 
 pers_game_records = read_from_personal_game_records()
 
@@ -84,12 +71,4 @@ if username is not None:
 
             else:
                 print("Records not found.")
-
-        # elif user_decision == 3:
-        #     user_token_inp = input("Account token: ")
-        #     logged_acc_token =
-
-
-
-
 
