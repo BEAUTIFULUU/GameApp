@@ -14,7 +14,7 @@ def validate_num_range_and_generate_random_num(frst_num: int, scn_num: int) -> i
             scn_num = int(input('Select number from 1 to 100 bigger than the first one: '))
 
 
-def guess_the_number(num_rng: tuple, random_nm: int, max_guesses: int = 7):
+def guess_the_number(num_rng: tuple, random_nm: int, max_guesses: int = 7) -> None:
     print(f'Numbers range is: {num_rng}.')
     guesses = 0
 
@@ -50,7 +50,7 @@ def guess_the_number(num_rng: tuple, random_nm: int, max_guesses: int = 7):
             print('Try again!')
 
 
-def number_guess_game():
+def number_guess_game() -> None:
     first_num = int(input('Select number from 1 to 100: '))
     second_num = int(input('Select number from 1 to 100 bigger than first one: '))
 
