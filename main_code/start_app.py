@@ -1,6 +1,9 @@
 from games.number_guess_game import number_guess_game
 from management_services.login import login_into_acc
-from management_services.read_write_users_data_functions import read_accounts_from_file, read_from_personal_game_records
+from management_services.read_write_users_data_functions import (
+    read_accounts_from_file,
+    read_from_personal_game_records,
+)
 from management_services.register_acc import register_account
 
 pers_game_records = read_from_personal_game_records()
@@ -20,7 +23,9 @@ def start_user_auth() -> str | None:
         if user_decision == 1:
             username = input("Enter username: ")
             password = input("Enter password: ")
-            logged = login_into_acc(val_username=username, val_password=password, acc_file=reload_acc_file)
+            logged = login_into_acc(
+                val_username=username, val_password=password, acc_file=reload_acc_file
+            )
             if logged:
                 return username
 
@@ -71,4 +76,3 @@ if username is not None:
 
             else:
                 print("Records not found.")
-
