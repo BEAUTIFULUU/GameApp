@@ -18,7 +18,7 @@ def _login_to_acc(log_username: str, log_password: str, log_acc_file: dict) -> b
     return login_result
 
 
-def _register_account(reg_surname: str, reg_login: str, reg_password: str) -> bool:
+def _register_account(reg_surname: str, reg_login: str, reg_password: str) -> bool | Tuple[str, str, str]:
     return register_acc(username_to_val=reg_surname, login_to_val=reg_login, password_to_val=reg_password)
 
 
