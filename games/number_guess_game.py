@@ -68,7 +68,6 @@ def guess_the_number(num_rng: tuple, random_nm: int, max_guesses: int = 7) -> in
 
 
 def number_guess_game(first_num: int, second_num: int) -> int:
-
     rnd_num = validate_num_range_and_generate_random_num(
         frst_num=first_num, scn_num=second_num
     )

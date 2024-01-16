@@ -15,7 +15,7 @@ acc_file = read_accounts_from_file()
 
 
 def register_acc(
-        username_to_val: str, login_to_val: str, password_to_val: str
+    username_to_val: str, login_to_val: str, password_to_val: str
 ) -> bool | Tuple[str, str, str]:
     validated_username = validate_username(
         username=username_to_val, accounts_file_dct=acc_file

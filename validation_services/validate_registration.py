@@ -24,8 +24,9 @@ def validate_username(username: str, accounts_file_dct: dict) -> str | bool:
         return username
 
 
-def validate_login(user_login: str, accounts_file_dct: dict, username: str) -> bool | str:
-
+def validate_login(
+    user_login: str, accounts_file_dct: dict, username: str
+) -> bool | str:
     if len(user_login) not in range(6, 16):
         print("Invalid password length.")
         return False
@@ -47,7 +48,6 @@ def validate_login(user_login: str, accounts_file_dct: dict, username: str) -> b
 
 
 def validate_password(user_password: str, accounts_file_dct: dict) -> bool | str:
-
     min_digits = 3
 
     if len(user_password) not in range(8, 20):
@@ -64,4 +64,3 @@ def validate_password(user_password: str, accounts_file_dct: dict) -> bool | str
 
     else:
         return user_password
-
