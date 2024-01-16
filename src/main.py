@@ -79,7 +79,5 @@ def start_app():
             else:
                 continue
 
-start_app()
-
 
 start_app()
