@@ -102,7 +102,10 @@ def start_app() -> None:
             reg_login = input("Enter login: ")
             reg_password = input("Enter password: ")
             register_result = register_acc(
-                reg_username, reg_login, reg_password, accounts_file
+                username_to_val=reg_username,
+                login_to_val=reg_login,
+                password_to_val=reg_password,
+                accounts_file=accounts_file,
             )
 
             if register_result is False:
