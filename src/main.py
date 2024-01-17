@@ -72,6 +72,7 @@ def start_app() -> None:
                                 print(
                                     f"Congratulations! You scored {game_score} in the Guess Number Game."
                                 )
+                                continue
 
                             else:
                                 print("Try harder next time.")
