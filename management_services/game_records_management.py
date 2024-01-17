@@ -1,43 +1,32 @@
-from management_services.read_write_users_data_functions import (
-    read_from_personal_game_records,
-    write_records_to_file,
-)
-
-records_dict = read_from_personal_game_records()
-
-
-def get_user_game_records(username: str, records_file: dict) -> None:
+def get_user_game_records(username: str, records_file: dict) -> dict[str, dict] | bool:
     if username in records_file:
         games_records = records_file[username]
 
+        user_records = {"records": {}}
+
         for game, records in games_records.items():
             score = records["score"]
-            print(f"{game}: {score}")
+            user_records["records"][game] = {"score": score}
+
+        return user_records
 
     else:
-        print(f"Game records for {username} not found.")
+        return False
 
 
-def update_game_record(username: str, game_name: str, score: int, records_file: dict):
-    if (
-        username not in records_file
-        or game_name not in records_file[username]
-        or score is None
-    ):
-        records_file[username] = {game_name: {"score": score}}
-        write_records_to_file(records_file)
-        print(f"New score is {score}.")
+def update_game_record(
+    username: str, game_name: str, score: int, records_file: dict
+) -> dict | bool:
+    records_data = records_file
 
-    else:
-        existing_score = records_file[username][game_name].get("score")
+    if username not in records_data and score is not None:
+        records_data[username] = {game_name: {"score": score}}
+        return records_data
 
-        if score > existing_score:
-            records_file[username][game_name]["score"] = score
-            write_records_to_file(records_file)
-            print(f"New record for {game_name}: {score}")
+    existing_record = records_data[username][game_name].get("score")
 
-        elif score == existing_score:
-            print("You equaled the record!")
+    if username in records_data and score >= existing_record:
+        records_data[username][game_name]["score"] = score
+        return records_data
 
-        elif score < existing_score:
-            print("Try harder next time.")
+    return False

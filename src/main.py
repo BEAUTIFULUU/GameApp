@@ -1,7 +1,6 @@
-from typing import Tuple
-
 from management_services.read_write_users_data_functions import (
     read_accounts_from_file,
+    write_accounts_to_file,
     read_from_personal_game_records,
     write_records_to_file,
 )
@@ -15,32 +14,9 @@ from management_services.game_records_management import (
 )
 
 
-def _login_to_acc(log_username: str, log_password: str) -> bool | Tuple[str, str]:
-    login_result = login_into_acc(
-        username_to_val=log_username,
-        password_to_val=log_password,
-    )
-    return login_result
-
-
-def _register_account(
-    reg_surname: str, reg_login: str, reg_password: str
-) -> bool | Tuple[str, str, str]:
-    return register_acc(
-        username_to_val=reg_surname,
-        login_to_val=reg_login,
-        password_to_val=reg_password,
-    )
-
-
-def _num_guess_game(first_num: int, second_num: int) -> int:
-    return number_guess_game(first_num, second_num)
-
-
-def start_app():
+def start_app() -> None:
     while True:
-        reload_acc_file = read_accounts_from_file()
-
+        accounts_file = read_accounts_from_file()
         auth_user_decision_str = get_valid_input(
             "1 - Login, 2 - Register, 0 - Exit: ",
             "Invalid input. Please enter a number.",
@@ -50,9 +26,17 @@ def start_app():
         if auth_user_decision == 1:
             log_username = input("Enter username: ")
             log_password = input("Enter password: ")
-            login_result = _login_to_acc(log_username, log_password)
+            login_result = login_into_acc(
+                accounts_file=accounts_file,
+                username_to_val=log_username,
+                password_to_val=log_password,
+            )
 
-            if login_result:
+            if login_result is False:
+                print("Invalid login credentials.")
+                continue
+
+            elif login_result:
                 while True:
                     user_rec_file = read_from_personal_game_records()
                     logged_usr_decision_str = get_valid_input(
@@ -75,25 +59,39 @@ def start_app():
                                     "Select number from 1 to 100 bigger than the first one: "
                                 )
                             )
-                            game_score = _num_guess_game(first_num, second_num)
-                            update_game_record(
+                            game_score = number_guess_game(first_num, second_num)
+                            update_result = update_game_record(
                                 username=log_username,
                                 game_name="Guess_Number_Game",
                                 records_file=user_rec_file,
                                 score=game_score,
                             )
 
-                            continue
+                            if update_result is not False:
+                                write_records_to_file(update_result)
+                                print(
+                                    f"Congratulations! You scored {game_score} in the Guess Number Game."
+                                )
 
-                        elif user_game_choice == 4:
-                            print("Exiting...")
-                            break
+                            else:
+                                print("Try harder next time.")
+                                continue
+
+                    elif logged_usr_decision == 4:
+                        print("Exiting...")
+                        break
 
                     elif logged_usr_decision == 2:
-                        get_user_game_records(
+                        user_records_result = get_user_game_records(
                             username=log_username, records_file=user_rec_file
                         )
-                        continue
+
+                        if user_records_result is not False:
+                            print(user_records_result)
+                            continue
+
+                        else:
+                            print(f"Records for {log_username} not found.")
 
             else:
                 continue
@@ -102,13 +100,22 @@ def start_app():
             reg_username = input("Enter username: ")
             reg_login = input("Enter login: ")
             reg_password = input("Enter password: ")
-            register_result = _register_account(reg_username, reg_login, reg_password)
+            register_result = register_acc(
+                reg_username, reg_login, reg_password, accounts_file
+            )
 
-            if register_result:
+            if register_result is False:
+                print("Invalid register credentials.")
                 continue
 
             else:
+                write_accounts_to_file(register_result)
+                print(f"Account with username: {reg_username} registered.")
                 continue
+
+        elif auth_user_decision == 0:
+            print("Exiting...")
+            break
 
 
 start_app()
