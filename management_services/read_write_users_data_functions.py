@@ -2,7 +2,7 @@ import json
 import os
 
 
-def read_accounts_from_file(filename: str):
+def read_data_from_file(filename: str, dict_key: str):
     accounts_data = {}
 
     if os.path.exists(filename):
@@ -13,28 +13,10 @@ def read_accounts_from_file(filename: str):
             else:
                 print(f"Error: File '{filename}'")
 
-    return accounts_data.get("accounts", {})
+    return accounts_data.get(dict_key, {})
 
 
-def write_accounts_to_file(accounts_dict: dict, filename: str) -> None:
+def write_data_to_file(data_dict: dict, filename: str, data_key: str) -> None:
     with open(filename, "w") as file:
-        file.write(json.dumps({"accounts": accounts_dict}, indent=4))
+        file.write(json.dumps({data_key: data_dict}, indent=4))
 
-
-def read_from_personal_game_records(filename: str):
-    personal_game_records = {}
-
-    if os.path.exists(filename):
-        with open(filename, "r") as file:
-            file_content = file.read()
-            if file_content:
-                personal_game_records = json.loads(file_content)
-            else:
-                print(f"Error: File '{filename}'.")
-
-    return personal_game_records.get("records", {})
-
-
-def write_records_to_file(records_dict: dict, filename: str) -> None:
-    with open(filename, "w") as file:
-        file.write(json.dumps({"records": records_dict}, indent=4))

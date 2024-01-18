@@ -1,8 +1,6 @@
 from management_services.read_write_users_data_functions import (
-    read_accounts_from_file,
-    write_accounts_to_file,
-    read_from_personal_game_records,
-    write_records_to_file,
+    write_data_to_file,
+    read_data_from_file,
 )
 from management_services.login_acc import login_into_acc
 from management_services.register_acc import register_acc
@@ -16,7 +14,10 @@ from management_services.game_records_management import (
 
 def start_app() -> None:
     while True:
-        accounts_file = read_accounts_from_file(filename="../users_data/accounts.json")
+        accounts_file = read_data_from_file(
+            filename="users_data/accounts.json",
+            dict_key="accounts"
+        )
         auth_user_decision_str = get_valid_input(
             "1 - Login, 2 - Register, 0 - Exit: ",
             "Invalid input. Please enter a number.",
@@ -38,8 +39,9 @@ def start_app() -> None:
 
             elif login_result:
                 while True:
-                    user_rec_file = read_from_personal_game_records(
-                        filename="../users_data/personal_game_records.json"
+                    user_rec_file = read_data_from_file(
+                        filename="users_data/personal_game_records.json",
+                        dict_key="records",
                     )
                     logged_usr_decision_str = get_valid_input(
                         "1 - Games, 2 - Personal games records, 3 - Change account credentials, 4 - Exit: ",
@@ -70,9 +72,10 @@ def start_app() -> None:
                             )
 
                             if update_result is not False:
-                                write_records_to_file(
+                                write_data_to_file(
                                     update_result,
-                                    filename="../users_data/personal_game_records.json",
+                                    filename="users_data/personal_game_records.json",
+                                    data_key="records",
                                 )
                                 print(
                                     f"Congratulations! You scored {game_score} in the Guess Number Game."
@@ -118,8 +121,10 @@ def start_app() -> None:
                 continue
 
             else:
-                write_accounts_to_file(
-                    register_result, filename="../users_data/accounts.json"
+                write_data_to_file(
+                    register_result,
+                    filename="users_data/accounts.json",
+                    data_key="accounts",
                 )
                 print(f"Account with username: {reg_username} registered.")
                 continue
