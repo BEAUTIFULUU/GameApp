@@ -14,9 +14,8 @@ from management_services.game_records_management import (
 
 def start_app() -> None:
     while True:
-        accounts_file = read_data_from_file(
-            filename="users_data/accounts.json",
-            dict_key="accounts"
+        accounts = read_data_from_file(
+            filename="users_data/accounts.json", dict_key="accounts"
         )
         auth_user_decision_str = get_valid_input(
             "1 - Login, 2 - Register, 0 - Exit: ",
@@ -28,9 +27,7 @@ def start_app() -> None:
             log_username = input("Enter username: ")
             log_password = input("Enter password: ")
             login_result = login_into_acc(
-                accounts_file=accounts_file,
-                username_to_val=log_username,
-                password_to_val=log_password,
+                username=log_username, password=log_password, accounts=accounts
             )
 
             if login_result is False:
@@ -113,7 +110,7 @@ def start_app() -> None:
                 username_to_val=reg_username,
                 login_to_val=reg_login,
                 password_to_val=reg_password,
-                accounts_file=accounts_file,
+                accounts=accounts,
             )
 
             if register_result is False:

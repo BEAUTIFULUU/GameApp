@@ -19,4 +19,3 @@ def read_data_from_file(filename: str, dict_key: str):
 def write_data_to_file(data_dict: dict, filename: str, data_key: str) -> None:
     with open(filename, "w") as file:
         file.write(json.dumps({data_key: data_dict}, indent=4))
-

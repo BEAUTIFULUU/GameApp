@@ -1,4 +1,4 @@
-def validate_username(username: str, accounts_file_dct: dict) -> str | bool:
+def validate_username(username: str, accounts_file_dct: dict) -> bool:
     min_digits = 2
 
     if len(username) not in range(6, 16):
@@ -11,7 +11,7 @@ def validate_username(username: str, accounts_file_dct: dict) -> str | bool:
         return False
 
     else:
-        return username
+        return True
 
 
 def validate_login(
