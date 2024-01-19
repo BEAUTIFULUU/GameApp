@@ -1,4 +1,6 @@
 import uuid
+from typing import Tuple
+
 from validation_services.validate_registration import (
     validate_username,
     validate_login,
@@ -7,27 +9,29 @@ from validation_services.validate_registration import (
 
 
 def register_acc(
-    username_to_val, login_to_val: str, password_to_val: str, accounts: dict
-) -> dict | bool:
-    if not validate_username(username=username_to_val, accounts_file_dct=accounts):
-        return False
+    username: str, login: str, password: str, accounts: dict
+) -> Tuple[bool, str] | dict:
+    username_valid, username_msg = validate_username(username=username, accounts_file_dct=accounts)
+    if not username_valid:
+        return False, f"Invalid username: {username_msg}"
 
-    elif not validate_login(
-        username=username_to_val,
-        user_login=login_to_val,
+    login_valid, login_msg = validate_login(
+        username=username,
+        user_login=login,
         accounts_file_dct=accounts,
-    ):
-        return False
+    )
+    if not login_valid:
+        return False, f"Invalid login: {login_msg}"
 
-    elif not validate_password(user_password=password_to_val, accounts_file_dct=accounts):
-        return False
+    password_valid, password_msg = validate_password(user_password=password, accounts_file_dct=accounts)
+    if not password_valid:
+        return False, f"Invalid password: {password_msg}"
 
-    else:
-        accounts_data = accounts
-        unique_token = str(uuid.uuid4())
-        accounts_data[username_to_val] = {
-            "login": login_to_val,
-            "password": password_to_val,
-            "token": unique_token,
-        }
-        return accounts_data
+    accounts_data = accounts
+    unique_token = str(uuid.uuid4())
+    accounts_data[username] = {
+        "login": login,
+        "password": password,
+        "token": unique_token,
+    }
+    return accounts_data
