@@ -1,7 +1,9 @@
 from typing import Tuple
 
 
-def validate_username(username: str, accounts_file_dct: dict) -> Tuple[bool, str] | bool:
+def validate_username(
+    username: str, accounts_file_dct: dict
+) -> Tuple[bool, str] | bool:
     min_digits = 2
 
     if len(username) not in range(6, 16):
@@ -36,7 +38,9 @@ def validate_login(
         return True
 
 
-def validate_password(user_password: str, accounts_file_dct: dict) -> Tuple[bool, str] | bool:
+def validate_password(
+    user_password: str, accounts_file_dct: dict
+) -> Tuple[bool, str] | bool:
     min_digits = 3
 
     if len(user_password) not in range(8, 20):

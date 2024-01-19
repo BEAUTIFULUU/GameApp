@@ -110,7 +110,7 @@ def start_app() -> None:
                 username=reg_username,
                 login=reg_login,
                 password=reg_password,
-                accounts=accounts
+                accounts=accounts,
             )
 
             if register_result is False:
