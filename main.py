@@ -12,6 +12,17 @@ from management_services.game_records_management import (
 )
 
 
+def _register_account(username: str, login: str, password: str, acc_dict: dict) -> dict | bool:
+    register_result = register_acc(
+        username_to_val=username,
+        login_to_val=login,
+        password_to_val=password,
+        accounts=acc_dict,
+    )
+
+    return register_result
+
+
 def start_app() -> None:
     while True:
         accounts = read_data_from_file(
@@ -106,11 +117,11 @@ def start_app() -> None:
             reg_username = input("Enter username: ")
             reg_login = input("Enter login: ")
             reg_password = input("Enter password: ")
-            register_result = register_acc(
-                username_to_val=reg_username,
-                login_to_val=reg_login,
-                password_to_val=reg_password,
-                accounts=accounts,
+            register_result = _register_account(
+                username=reg_username,
+                login=reg_login,
+                password=reg_password,
+                acc_dict=accounts
             )
 
             if register_result is False:
