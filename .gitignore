@@ -3,3 +3,5 @@ fds.py
 /users_data
 
 task.py
+
+_pycache/
