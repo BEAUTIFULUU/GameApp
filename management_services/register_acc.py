@@ -11,25 +11,25 @@ from validation_services.validate_registration import (
 def register_acc(
     username: str, login: str, password: str, accounts: dict[str, uuid]
 ) -> Tuple[bool, str] | Tuple[dict, str]:
-    username_valid, username_msg = validate_username(
+    username_result = validate_username(
         username=username, accounts_file_dct=accounts
     )
-    if not username_valid:
-        return False, f"Invalid username: {username_msg}"
+    if username_result is not None:
+        return False, f"Invalid username: {username_result}"
 
-    login_valid, login_msg = validate_login(
+    login_result = validate_login(
         username=username,
         user_login=login,
         accounts_file_dct=accounts,
     )
-    if not login_valid:
-        return False, f"Invalid login: {login_msg}"
+    if login_result is not None:
+        return False, f"Invalid login: {login_result}"
 
-    password_valid, password_msg = validate_password(
+    password_result = validate_password(
         user_password=password, accounts_file_dct=accounts
     )
-    if not password_valid:
-        return False, f"Invalid password: {password_msg}"
+    if password_result is not None:
+        return False, f"Invalid password: {password_result}"
 
     accounts_data = accounts
     unique_token = str(uuid.uuid4())
