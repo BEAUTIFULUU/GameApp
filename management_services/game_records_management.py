@@ -1,6 +1,8 @@
-def get_user_game_records(username: str, records_file: dict) -> dict[str, dict] | bool:
-    if username in records_file:
-        games_records = records_file[username]
+def get_user_game_records(
+    username: str, user_records: dict[str, int]
+) -> dict[str, dict] | bool:
+    if username in user_records:
+        games_records = user_records[username]
 
         user_records = {"records": {}}
 
@@ -15,9 +17,9 @@ def get_user_game_records(username: str, records_file: dict) -> dict[str, dict] 
 
 
 def update_game_record(
-    username: str, game_name: str, score: int, records_file: dict
+    username: str, game_name: str, score: int, user_records: dict[str, dict]
 ) -> dict | bool:
-    records_data = records_file
+    records_data = user_records
 
     if username not in records_data and score is not None:
         records_data[username] = {game_name: {"score": score}}

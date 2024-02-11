@@ -1,3 +1,5 @@
+from typing import Tuple
+
 from management_services.read_write_users_data_functions import (
     write_data_to_file,
     read_data_from_file,
@@ -10,6 +12,71 @@ from management_services.game_records_management import (
     update_game_record,
     get_user_game_records,
 )
+
+
+def _handle_user_login(
+    username: str, password: str, accounts: dict[str, str]
+) -> Tuple[str, bool]:
+    login_result = login_into_acc(
+        username=username, password=password, accounts=accounts
+    )
+    if login_result is False:
+        return "Invalid login credentials.", False
+    elif login_result:
+        return "Logged successfully.", True
+
+
+def _handle_user_registration(
+    username: str, login: str, password: str, accounts: dict[str, str]
+) -> str:
+    register_result, register_msg = register_acc(
+        username=username,
+        login=login,
+        password=password,
+        accounts=accounts,
+    )
+
+    if register_result is False:
+        return register_msg
+
+    elif register_result:
+        write_data_to_file(
+            register_result,
+            filename="users_data/accounts.json",
+            data_key="accounts",
+        )
+        return register_msg
+
+
+def _handle_guess_game_actions(
+    username: str, user_records: dict[str, dict], first_num: int, second_num: int
+) -> str:
+    game_score = number_guess_game(first_num=first_num, second_num=second_num)
+    update_result = update_game_record(
+        username=username,
+        game_name="Guess_Number_Game",
+        user_records=user_records,
+        score=game_score,
+    )
+
+    if update_result is not False:
+        write_data_to_file(
+            update_result,
+            filename="users_data/personal_game_records.json",
+            data_key="records",
+        )
+        return f"You scored {game_score} in the Guess Number Game."
+
+
+def _get_user_records(username: str, user_records: dict[str, int]) -> str | dict:
+    user_records_result = get_user_game_records(
+        username=username, user_records=user_records
+    )
+    if user_records_result is False:
+        return "Personal records not found"
+
+    elif user_records_result:
+        return user_records_result
 
 
 def start_app() -> None:
@@ -26,17 +93,14 @@ def start_app() -> None:
         if auth_user_decision == 1:
             log_username = input("Enter username: ")
             log_password = input("Enter password: ")
-            login_result = login_into_acc(
+            login_msg, login_result = _handle_user_login(
                 username=log_username, password=log_password, accounts=accounts
             )
+            print(login_msg)
 
-            if login_result is False:
-                print("Invalid login credentials.")
-                continue
-
-            elif login_result:
+            if login_result:
                 while True:
-                    user_rec_file = read_data_from_file(
+                    user_records = read_data_from_file(
                         filename="users_data/personal_game_records.json",
                         dict_key="records",
                     )
@@ -60,44 +124,25 @@ def start_app() -> None:
                                     "Select number from 1 to 100 bigger than the first one: "
                                 )
                             )
-                            game_score = number_guess_game(first_num, second_num)
-                            update_result = update_game_record(
+                            game_score = _handle_guess_game_actions(
                                 username=log_username,
-                                game_name="Guess_Number_Game",
-                                records_file=user_rec_file,
-                                score=game_score,
+                                user_records=user_records,
+                                first_num=first_num,
+                                second_num=second_num,
                             )
 
-                            if update_result is not False:
-                                write_data_to_file(
-                                    update_result,
-                                    filename="users_data/personal_game_records.json",
-                                    data_key="records",
-                                )
-                                print(
-                                    f"Congratulations! You scored {game_score} in the Guess Number Game."
-                                )
-                                continue
-
-                            else:
-                                print("Try harder next time.")
-                                continue
+                            print(game_score)
+                            continue
 
                     elif logged_usr_decision == 4:
                         print("Exiting...")
                         break
 
                     elif logged_usr_decision == 2:
-                        user_records_result = get_user_game_records(
-                            username=log_username, records_file=user_rec_file
+                        user_records = _get_user_records(
+                            username=log_username, user_records=user_records
                         )
-
-                        if user_records_result is not False:
-                            print(user_records_result)
-                            continue
-
-                        else:
-                            print(f"Records for {log_username} not found.")
+                        print(user_records)
 
             else:
                 continue
@@ -106,25 +151,14 @@ def start_app() -> None:
             reg_username = input("Enter username: ")
             reg_login = input("Enter login: ")
             reg_password = input("Enter password: ")
-            register_result, register_msg = register_acc(
+            register_result = _handle_user_registration(
                 username=reg_username,
                 login=reg_login,
                 password=reg_password,
                 accounts=accounts,
             )
-
-            if register_result is False:
-                print(f"{register_msg}")
-                continue
-
-            else:
-                write_data_to_file(
-                    register_result,
-                    filename="users_data/accounts.json",
-                    data_key="accounts",
-                )
-                print(f"{register_msg}")
-                continue
+            print(register_result)
+            continue
 
         elif auth_user_decision == 0:
             print("Exiting...")

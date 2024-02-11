@@ -9,7 +9,7 @@ from validation_services.validate_registration import (
 
 
 def register_acc(
-    username: str, login: str, password: str, accounts: dict
+    username: str, login: str, password: str, accounts: dict[str, uuid]
 ) -> Tuple[bool, str] | Tuple[dict, str]:
     username_valid, username_msg = validate_username(
         username=username, accounts_file_dct=accounts
