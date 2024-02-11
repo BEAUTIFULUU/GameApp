@@ -16,7 +16,7 @@ def validate_username(
         return False, "Username already exists."
 
     else:
-        return True
+        return True, "Username valid."
 
 
 def validate_login(
@@ -35,7 +35,7 @@ def validate_login(
         return False, "Login needs to be different than username."
 
     else:
-        return True
+        return True, "Login valid."
 
 
 def validate_password(
@@ -53,4 +53,4 @@ def validate_password(
         return False, "Invalid password"
 
     else:
-        return True
+        return True, "Password valid."
