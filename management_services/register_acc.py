@@ -11,9 +11,7 @@ from validation_services.validate_registration import (
 def register_acc(
     username: str, login: str, password: str, accounts: dict[str, uuid]
 ) -> Tuple[bool, str] | Tuple[dict, str]:
-    username_result = validate_username(
-        username=username, accounts_file_dct=accounts
-    )
+    username_result = validate_username(username=username, accounts_file_dct=accounts)
     if username_result is not None:
         return False, f"Invalid username: {username_result}"
 
