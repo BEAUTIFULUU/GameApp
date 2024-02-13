@@ -12,6 +12,7 @@ from management_services.game_records_management import (
     update_game_record,
     get_user_game_records,
 )
+from management_services.update_user_credentials import update_acc_dict
 
 
 def _handle_user_login(
@@ -41,7 +42,7 @@ def _handle_user_registration(
 
     elif register_result:
         write_data_to_file(
-            register_result,
+            data_dict=register_result,
             filename="users_data/accounts.json",
             data_key="accounts",
         )
@@ -59,13 +60,14 @@ def _handle_guess_game_actions(
         score=game_score,
     )
 
-    if update_result is not False:
+    if update_result is not False and update_result is not None:
         write_data_to_file(
-            update_result,
+            data_dict=update_result,
             filename="users_data/personal_game_records.json",
             data_key="records",
         )
         return f"You scored {game_score} in the Guess Number Game."
+    return "Try harder next time!"
 
 
 def _get_user_records(username: str, user_records: dict[str, int]) -> str | dict:
@@ -77,6 +79,26 @@ def _get_user_records(username: str, user_records: dict[str, int]) -> str | dict
 
     elif user_records_result:
         return user_records_result
+
+
+def _update_username(
+    username: str, new_username: str, accounts: dict[str, dict]
+) -> str:
+    update_message = update_acc_dict(
+        username=username, new_username=new_username, accounts=accounts
+    )
+
+    write_data_to_file(
+        data_dict=accounts,
+        filename="users_data/accounts.json",
+        data_key="accounts",
+    )
+    write_data_to_file(
+        data_dict=accounts,
+        filename="users_data/personal_game_records.json",
+        data_key="records",
+    )
+    return update_message
 
 
 def start_app() -> None:
@@ -133,6 +155,22 @@ def start_app() -> None:
 
                             print(game_score)
                             continue
+
+                    elif logged_usr_decision == 3:
+                        change_credentials_choice = get_valid_input(
+                            prompt="1 - Change username, 2 - Change login, 3 - Change password, 4 - Exit: ",
+                            error_message="Invalid input. Please enter a number.",
+                        )
+                        update_choice = int(change_credentials_choice)
+                        if update_choice == 1:
+                            new_username = input("Enter new username: ")
+                            update_message = _update_username(
+                                username=log_username,
+                                new_username=new_username,
+                                accounts=accounts,
+                            )
+                            print(update_message)
+                        continue
 
                     elif logged_usr_decision == 4:
                         print("Exiting...")

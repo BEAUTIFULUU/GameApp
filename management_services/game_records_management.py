@@ -18,20 +18,22 @@ def get_user_game_records(
 
 def update_game_record(
     username: str, game_name: str, score: int, user_records: dict[str, dict]
-) -> bool:
-    records_data = user_records
+) -> dict | bool:
+    if user_records is None:
+        user_records = {}
 
     if score is not None:
-        if username not in records_data:
-            records_data[username] = {}
+        if username not in user_records:
+            user_records[username] = {}
 
-        if game_name not in records_data[username]:
-            records_data[username][game_name] = {"score": score}
-            return True
+        if game_name not in user_records[username]:
+            user_records[username][game_name] = {"score": score}
+            return user_records
 
-        existing_record = records_data[username][game_name].get("score")
+        existing_record = user_records[username][game_name].get("score")
         if score >= existing_record:
-            records_data[username][game_name]["score"] = score
-            return True
+            user_records[username][game_name]["score"] = score
+            return user_records
 
-    return False
+        if score < existing_record:
+            return False

@@ -1,6 +1,17 @@
-from management_services.read_write_users_data_functions import read_accounts_from_file
+from typing import Tuple
 
-acc_file = read_accounts_from_file()
+from validation_services.validate_credentials_to_update import validate_new_username
 
 
-# def update_login(username: str, new_login: str, token: str):
+def update_acc_dict(
+    username: str, new_username: str, accounts: dict[str, dict]
+) -> Tuple[bool, str] | str:
+    login = accounts[username].get("login")
+    username_result = validate_new_username(
+        new_username=new_username, login=login, accounts=accounts
+    )
+    if username_result is not None:
+        return False, f"Invalid username: {username_result}"
+
+    accounts[new_username] = accounts.pop(username)
+    return "Username changed"
