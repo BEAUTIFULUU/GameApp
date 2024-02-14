@@ -1,5 +1,4 @@
 import json
-import os
 
 
 def read_data_from_file(filename: str):
