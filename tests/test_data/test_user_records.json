@@ -1,3 +1,7 @@
 {
-    "records": {}
+    "testuser123": {
+        "Guess_Number_Game": {
+            "score": 4
+        }
+    }
 }

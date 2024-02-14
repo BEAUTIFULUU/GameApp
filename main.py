@@ -44,7 +44,6 @@ def _handle_user_registration(
         write_data_to_file(
             data_dict=register_result,
             filename="users_data/accounts.json",
-            data_key="accounts",
         )
         return register_msg
 
@@ -64,7 +63,6 @@ def _handle_guess_game_actions(
         write_data_to_file(
             data_dict=update_result,
             filename="users_data/personal_game_records.json",
-            data_key="records",
         )
         return f"You scored {game_score} in the Guess Number Game."
     return "Try harder next time!"
@@ -91,12 +89,10 @@ def _update_username(
     write_data_to_file(
         data_dict=accounts,
         filename="users_data/accounts.json",
-        data_key="accounts",
     )
     write_data_to_file(
         data_dict=accounts,
         filename="users_data/personal_game_records.json",
-        data_key="records",
     )
     return update_message
 
@@ -104,7 +100,7 @@ def _update_username(
 def start_app() -> None:
     while True:
         accounts = read_data_from_file(
-            filename="users_data/accounts.json", dict_key="accounts"
+            filename="users_data/accounts.json",
         )
         auth_user_decision_str = get_valid_input(
             "1 - Login, 2 - Register, 0 - Exit: ",
@@ -124,7 +120,6 @@ def start_app() -> None:
                 while True:
                     user_records = read_data_from_file(
                         filename="users_data/personal_game_records.json",
-                        dict_key="records",
                     )
                     logged_usr_decision_str = get_valid_input(
                         "1 - Games, 2 - Personal games records, 3 - Change account credentials, 4 - Exit: ",

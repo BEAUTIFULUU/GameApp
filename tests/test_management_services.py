@@ -11,16 +11,14 @@ from management_services.register_acc import register_acc
 @pytest.fixture
 def open_records_dict():
     records_dict = read_data_from_file(
-        filename="tests/test_data/test_user_records.json", dict_key="records"
+        filename="tests/test_data/test_user_records.json"
     )
     return records_dict
 
 
 @pytest.fixture
 def open_accounts_dict():
-    accounts_dict = read_data_from_file(
-        filename="tests/test_data/test_accounts.json", dict_key="accounts"
-    )
+    accounts_dict = read_data_from_file(filename="tests/test_data/test_accounts.json")
     return accounts_dict
 
 

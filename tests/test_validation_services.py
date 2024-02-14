@@ -10,7 +10,7 @@ from validation_services.validate_registration import (
 @pytest.fixture
 def open_accounts_dict():
     accounts_dict = read_data_from_file(
-        filename="tests/test_data/test_accounts.json", dict_key="accounts"
+        filename="tests/test_data/test_accounts.json",
     )
     return accounts_dict
 

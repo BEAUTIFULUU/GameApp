@@ -1,9 +1,7 @@
 {
-  "accounts": {
-    "testusername55": {
-      "login": "testlogin12",
-      "password": "testpassword354",
-      "token": "2f7429d3-be4e-4f43-bfc1-261e4002ca7c"
-    }
-  }
+  "testusername55": {
+        "login": "testlogin12",
+        "password": "testpassword354",
+        "token": "2f7429d3-be4e-4f43-bfc1-261e4002ca7c"
+      }
 }
