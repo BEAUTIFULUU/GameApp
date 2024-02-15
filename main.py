@@ -184,14 +184,18 @@ def start_app() -> None:
             reg_username = input("Enter username: ")
             reg_login = input("Enter login: ")
             reg_password = input("Enter password: ")
-            register_result = _handle_user_registration(
-                username=reg_username,
-                login=reg_login,
-                password=reg_password,
-                accounts=accounts,
-            )
-            print(register_result)
-            continue
+            try:
+                register_result = _handle_user_registration(
+                    username=reg_username,
+                    login=reg_login,
+                    password=reg_password,
+                    accounts=accounts,
+                )
+                print(register_result)
+
+            except ValueError as e:
+                print(f"Error: {e}")
+                continue
 
         elif auth_user_decision == 0:
             print("Exiting...")

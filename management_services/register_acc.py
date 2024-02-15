@@ -10,10 +10,10 @@ from validation_services.validate_registration import (
 
 def register_acc(
     username: str, login: str, password: str, accounts: dict[str, uuid]
-) -> Tuple[bool, str] | Tuple[dict, str]:
+) -> Tuple[bool, Exception] | Tuple[dict, str]:
     username_result = validate_username(username=username, accounts_file_dct=accounts)
     if username_result is not None:
-        return False, f"Invalid username: {username_result}"
+        return False, username_result
 
     login_result = validate_login(
         username=username,
@@ -21,13 +21,13 @@ def register_acc(
         accounts_file_dct=accounts,
     )
     if login_result is not None:
-        return False, f"Invalid login: {login_result}"
+        return False, login_result
 
     password_result = validate_password(
         user_password=password, accounts_file_dct=accounts
     )
     if password_result is not None:
-        return False, f"Invalid password: {password_result}"
+        return False, password_result
 
     accounts_data = accounts
     unique_token = str(uuid.uuid4())
