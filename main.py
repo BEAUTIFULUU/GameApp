@@ -12,7 +12,7 @@ from management_services.game_records_management import (
     update_game_record,
     get_user_game_records,
 )
-from management_services.update_user_credentials import update_acc_dict
+from management_services.update_user_credentials import update_username_in_acc_dict
 
 
 def _handle_user_login(
@@ -82,18 +82,19 @@ def _get_user_records(username: str, user_records: dict[str, int]) -> str | dict
 def _update_username(
     username: str, new_username: str, accounts: dict[str, dict]
 ) -> str:
-    update_message = update_acc_dict(
+    result, update_message = update_username_in_acc_dict(
         username=username, new_username=new_username, accounts=accounts
     )
-
-    write_data_to_file(
-        data_dict=accounts,
-        filename="users_data/accounts.json",
-    )
-    write_data_to_file(
-        data_dict=accounts,
-        filename="users_data/personal_game_records.json",
-    )
+    if result is not False:
+        write_data_to_file(
+            data_dict=accounts,
+            filename="users_data/accounts.json",
+        )
+        write_data_to_file(
+            data_dict=accounts,
+            filename="users_data/personal_game_records.json",
+        )
+        return update_message
     return update_message
 
 
@@ -159,13 +160,16 @@ def start_app() -> None:
                         update_choice = int(change_credentials_choice)
                         if update_choice == 1:
                             new_username = input("Enter new username: ")
-                            update_message = _update_username(
-                                username=log_username,
-                                new_username=new_username,
-                                accounts=accounts,
-                            )
-                            print(update_message)
-                        continue
+                            try:
+                                update_message = _update_username(
+                                    username=log_username,
+                                    new_username=new_username,
+                                    accounts=accounts,
+                                )
+                                print(update_message)
+                            except ValueError as e:
+                                print(f"Error: {e}")
+                                continue
 
                     elif logged_usr_decision == 4:
                         print("Exiting...")

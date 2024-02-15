@@ -6,6 +6,7 @@ from management_services.game_records_management import (
 )
 from management_services.login_acc import login_into_acc
 from management_services.register_acc import register_acc
+from management_services.update_user_credentials import update_username_in_acc_dict
 
 
 @pytest.fixture
@@ -228,3 +229,37 @@ class TestRegisterManagement:
             assert result is False
             assert str(exc_info.value) == "Password must be in range 8-19."
         assert username not in accounts
+
+
+class TestUpdateCredentialsManagement:
+    def test_update_username_in_acc_dict_return_true_and_message_if_username_valid(
+        self, open_accounts_dict
+    ):
+        accounts = open_accounts_dict
+        username = "testusername55"
+        new_username = "testusername66"
+        assert username in accounts
+        result, message = update_username_in_acc_dict(
+            username=username, new_username=new_username, accounts=accounts
+        )
+        assert result is True
+        assert message == "Username changed."
+        assert new_username in accounts
+        assert username not in accounts
+
+    def test_update_username_in_acc_dict_return_false_and_message_if_username_is_invalid(
+        self, open_accounts_dict
+    ):
+        accounts = open_accounts_dict
+        username = "testusername55"
+        new_username = "1"
+        assert username in accounts
+        with pytest.raises(ValueError) as exc_info:
+            result, message = update_username_in_acc_dict(
+                username=username, new_username=new_username, accounts=accounts
+            )
+            assert result is False
+            assert str(exc_info.value) == "Username must be in range 6-15."
+
+        assert new_username not in accounts
+        assert username in accounts
