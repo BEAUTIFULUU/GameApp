@@ -68,7 +68,9 @@ def _handle_guess_game_actions(
     return "Try harder next time!"
 
 
-def _get_user_records(username: str, user_records: dict[str, dict]) -> str | dict:
+def _handle_get_user_records(
+    username: str, user_records: dict[str, dict]
+) -> str | dict:
     user_records_result = get_user_game_records(
         username=username, user_records=user_records
     )
@@ -79,7 +81,7 @@ def _get_user_records(username: str, user_records: dict[str, dict]) -> str | dic
         return user_records_result
 
 
-def _update_username(
+def _handle_update_username(
     username: str,
     new_username: str,
     accounts: dict[str, dict],
@@ -164,7 +166,7 @@ def start_app() -> None:
                         if update_choice == 1:
                             new_username = input("Enter new username: ")
                             try:
-                                update_message = _update_username(
+                                update_message = _handle_update_username(
                                     username=log_username,
                                     new_username=new_username,
                                     accounts=accounts,
@@ -181,7 +183,7 @@ def start_app() -> None:
                         break
 
                     elif logged_usr_decision == 2:
-                        user_records = _get_user_records(
+                        user_records = _handle_get_user_records(
                             username=log_username, user_records=user_records
                         )
                         print(user_records)
