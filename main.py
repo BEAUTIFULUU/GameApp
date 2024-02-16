@@ -80,22 +80,25 @@ def _get_user_records(username: str, user_records: dict[str, dict]) -> str | dic
 
 
 def _update_username(
-    username: str, new_username: str, accounts: dict[str, dict]
-) -> str:
-    result, update_message = update_username_in_acc_dict(
-        username=username, new_username=new_username, accounts=accounts
+    username: str,
+    new_username: str,
+    accounts: dict[str, dict],
+    records: dict[str, dict],
+) -> ValueError | str:
+    result = update_username_in_acc_dict(
+        username=username, new_username=new_username, accounts=accounts, records=records
     )
-    if result is not False:
+    if result is None:
         write_data_to_file(
             data_dict=accounts,
             filename="users_data/accounts.json",
         )
         write_data_to_file(
-            data_dict=accounts,
+            data_dict=records,
             filename="users_data/personal_game_records.json",
         )
-        return update_message
-    return update_message
+        return "Username changed."
+    return result
 
 
 def start_app() -> None:
@@ -165,8 +168,10 @@ def start_app() -> None:
                                     username=log_username,
                                     new_username=new_username,
                                     accounts=accounts,
+                                    records=user_records,
                                 )
                                 print(update_message)
+                                log_username = new_username
                             except ValueError as e:
                                 print(f"Error: {e}")
                                 continue

@@ -175,10 +175,10 @@ class TestRegisterManagement:
         username = "testusername44"
         login = "testlogin21"
         password = "testpassword453"
-        result, message = register_acc(
+        result = register_acc(
             username=username, login=login, password=password, accounts=accounts
         )
-        assert message == "Account registered."
+        assert isinstance(result, dict)
         assert username in accounts
         assert accounts[username]["login"] == login
         assert accounts[username]["password"] == password
@@ -192,10 +192,9 @@ class TestRegisterManagement:
         login = "testlogin21"
         password = "testpassword453"
         with pytest.raises(ValueError) as exc_info:
-            result, message = register_acc(
+            register_acc(
                 username=username, login=login, password=password, accounts=accounts
             )
-            assert result is False
             assert str(exc_info.value) == "Username must be in range 6-15."
         assert username not in accounts
 
@@ -208,10 +207,9 @@ class TestRegisterManagement:
         password = "testpassword453"
 
         with pytest.raises(ValueError) as exc_info:
-            result, message = register_acc(
+            register_acc(
                 username=username, login=login, password=password, accounts=accounts
             )
-            assert result is False
             assert str(exc_info.value) == "Login needs to be in range 6-15."
         assert username not in accounts
 
@@ -223,42 +221,47 @@ class TestRegisterManagement:
         login = "testlogin21"
         password = "1"
         with pytest.raises(ValueError) as exc_info:
-            result, message = register_acc(
+            register_acc(
                 username=username, login=login, password=password, accounts=accounts
             )
-            assert result is False
             assert str(exc_info.value) == "Password must be in range 8-19."
         assert username not in accounts
 
 
 class TestUpdateCredentialsManagement:
     def test_update_username_in_acc_dict_return_true_and_message_if_username_valid(
-        self, open_accounts_dict
+        self, open_accounts_dict, open_records_dict
     ):
         accounts = open_accounts_dict
+        records = open_records_dict
         username = "testusername55"
         new_username = "testusername66"
         assert username in accounts
-        result, message = update_username_in_acc_dict(
-            username=username, new_username=new_username, accounts=accounts
+        result = update_username_in_acc_dict(
+            username=username,
+            new_username=new_username,
+            accounts=accounts,
+            records=records,
         )
-        assert result is True
-        assert message == "Username changed."
+        assert result is None
         assert new_username in accounts
         assert username not in accounts
 
     def test_update_username_in_acc_dict_return_false_and_message_if_username_is_invalid(
-        self, open_accounts_dict
+        self, open_accounts_dict, open_records_dict
     ):
         accounts = open_accounts_dict
+        records = open_records_dict
         username = "testusername55"
         new_username = "1"
         assert username in accounts
         with pytest.raises(ValueError) as exc_info:
-            result, message = update_username_in_acc_dict(
-                username=username, new_username=new_username, accounts=accounts
+            update_username_in_acc_dict(
+                username=username,
+                new_username=new_username,
+                accounts=accounts,
+                records=records,
             )
-            assert result is False
             assert str(exc_info.value) == "Username must be in range 6-15."
 
         assert new_username not in accounts
