@@ -1,4 +1,6 @@
-def validate_username(username: str, accounts_file_dct: dict) -> ValueError | None:
+def validate_username(
+    username: str, accounts_file_dct: dict[str, dict]
+) -> ValueError | None:
     min_digits = 2
 
     if len(username) not in range(6, 16):
@@ -15,7 +17,7 @@ def validate_username(username: str, accounts_file_dct: dict) -> ValueError | No
 
 
 def validate_login(
-    user_login: str, accounts_file_dct: dict, username: str
+    user_login: str, accounts_file_dct: dict[str, dict], username: str
 ) -> ValueError | None:
     if len(user_login) not in range(6, 16):
         raise ValueError("Login must be in range 6-15.")
@@ -33,7 +35,9 @@ def validate_login(
         return None
 
 
-def validate_password(user_password: str, accounts_file_dct: dict) -> ValueError | None:
+def validate_password(
+    user_password: str, accounts_file_dct: dict[str, dict]
+) -> ValueError | None:
     min_digits = 3
 
     if len(user_password) not in range(8, 20):

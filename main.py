@@ -16,7 +16,7 @@ from management_services.update_user_credentials import update_username_in_acc_d
 
 
 def _handle_user_login(
-    username: str, password: str, accounts: dict[str, str]
+    username: str, password: str, accounts: dict[str, dict]
 ) -> Tuple[str, bool]:
     login_result = login_into_acc(
         username=username, password=password, accounts=accounts

@@ -1,6 +1,4 @@
 import uuid
-from typing import Tuple
-
 from validation_services.validate_registration import (
     validate_username,
     validate_login,
