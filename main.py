@@ -70,7 +70,7 @@ def _handle_guess_game_actions(
 
 def _handle_get_user_records(
     username: str, user_records: dict[str, dict]
-) -> str | dict:
+) -> str | dict[str, dict]:
     user_records_result = get_user_game_records(
         username=username, user_records=user_records
     )
@@ -99,7 +99,7 @@ def _handle_update_username(
             data_dict=records,
             filename="users_data/personal_game_records.json",
         )
-        return "Username changed."
+        return f"Username changed to {new_username}."
     return result
 
 
