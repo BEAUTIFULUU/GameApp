@@ -10,24 +10,26 @@ from validation_services.validate_registration import (
 
 def register_acc(
     username: str, login: str, password: str, accounts: dict[str, uuid]
-) -> Tuple[bool, Exception] | Tuple[dict, str]:
-    username_result = validate_username(username=username, accounts_file_dct=accounts)
-    if username_result is not None:
-        return False, username_result
+) -> Exception | dict[str, str]:
+    username_exception = validate_username(
+        username=username, accounts_file_dct=accounts
+    )
+    if username_exception is not None:
+        return username_exception
 
-    login_result = validate_login(
+    login_exception = validate_login(
         username=username,
         user_login=login,
         accounts_file_dct=accounts,
     )
-    if login_result is not None:
-        return False, login_result
+    if login_exception is not None:
+        return login_exception
 
-    password_result = validate_password(
+    password_exception = validate_password(
         user_password=password, accounts_file_dct=accounts
     )
-    if password_result is not None:
-        return False, password_result
+    if password_exception is not None:
+        return password_exception
 
     accounts_data = accounts
     unique_token = str(uuid.uuid4())
@@ -36,4 +38,4 @@ def register_acc(
         "password": password,
         "token": unique_token,
     }
-    return accounts_data, "Account registered."
+    return accounts_data

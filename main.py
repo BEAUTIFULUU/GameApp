@@ -29,23 +29,23 @@ def _handle_user_login(
 
 def _handle_user_registration(
     username: str, login: str, password: str, accounts: dict[str, str]
-) -> str:
-    register_result, register_msg = register_acc(
+) -> ValueError | str:
+    register_result = register_acc(
         username=username,
         login=login,
         password=password,
         accounts=accounts,
     )
 
-    if register_result is False:
-        return register_msg
+    if isinstance(register_result, ValueError):
+        return register_result
 
-    elif register_result:
+    elif not isinstance(register_result, ValueError):
         write_data_to_file(
             data_dict=register_result,
             filename="users_data/accounts.json",
         )
-        return register_msg
+        return "Account registered."
 
 
 def _handle_guess_game_actions(
@@ -68,7 +68,7 @@ def _handle_guess_game_actions(
     return "Try harder next time!"
 
 
-def _get_user_records(username: str, user_records: dict[str, int]) -> str | dict:
+def _get_user_records(username: str, user_records: dict[str, dict]) -> str | dict:
     user_records_result = get_user_game_records(
         username=username, user_records=user_records
     )

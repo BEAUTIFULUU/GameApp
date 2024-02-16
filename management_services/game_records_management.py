@@ -1,5 +1,5 @@
 def get_user_game_records(
-    username: str, user_records: dict[str, int]
+    username: str, user_records: dict[str, dict]
 ) -> dict[str, dict] | bool:
     if username in user_records:
         games_records = user_records[username]
