@@ -16,25 +16,6 @@ def validate_username(
         return None
 
 
-def validate_login(
-    user_login: str, accounts_file_dct: dict[str, dict], username: str
-) -> ValueError | None:
-    if len(user_login) not in range(6, 16):
-        raise ValueError("Login must be in range 6-15.")
-
-    elif not any(char.isdigit() for char in user_login):
-        raise ValueError("Login must have at least 1 digit.")
-
-    elif any(data["login"] == user_login for data in accounts_file_dct.values()):
-        raise ValueError("Login already exists.")
-
-    elif user_login == username:
-        raise ValueError("Login must be different from username.")
-
-    else:
-        return None
-
-
 def validate_password(
     user_password: str, accounts_file_dct: dict[str, dict]
 ) -> ValueError | None:

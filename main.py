@@ -28,11 +28,10 @@ def _handle_user_login(
 
 
 def _handle_user_registration(
-    username: str, login: str, password: str, accounts: dict[str, str]
+    username: str, password: str, accounts: dict[str, str]
 ) -> ValueError | str:
     register_result = register_acc(
         username=username,
-        login=login,
         password=password,
         accounts=accounts,
     )
@@ -159,7 +158,7 @@ def start_app() -> None:
 
                     elif logged_usr_decision == 3:
                         change_credentials_choice = get_valid_input(
-                            prompt="1 - Change username, 2 - Change login, 3 - Change password, 4 - Exit: ",
+                            prompt="1 - Change username, 2 - Change password, 3 - Exit: ",
                             error_message="Invalid input. Please enter a number.",
                         )
                         update_choice = int(change_credentials_choice)
@@ -193,12 +192,10 @@ def start_app() -> None:
 
         elif auth_user_decision == 2:
             reg_username = input("Enter username: ")
-            reg_login = input("Enter login: ")
             reg_password = input("Enter password: ")
             try:
                 register_result = _handle_user_registration(
                     username=reg_username,
-                    login=reg_login,
                     password=reg_password,
                     accounts=accounts,
                 )

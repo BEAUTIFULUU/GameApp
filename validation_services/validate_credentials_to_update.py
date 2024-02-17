@@ -3,7 +3,7 @@ def validate_new_username(
 ) -> ValueError | None:
     min_digits = 2
 
-    if len(new_username) not in range(6, 16) or new_username is None:
+    if len(new_username) not in range(6, 16):
         raise ValueError("Username needs to be in range 6-15.")
 
     elif not sum(char.isdigit() for char in new_username) >= min_digits:

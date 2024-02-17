@@ -173,14 +173,10 @@ class TestRegisterManagement:
     ):
         accounts = open_accounts_dict
         username = "testusername44"
-        login = "testlogin21"
         password = "testpassword453"
-        result = register_acc(
-            username=username, login=login, password=password, accounts=accounts
-        )
+        result = register_acc(username=username, password=password, accounts=accounts)
         assert isinstance(result, dict)
         assert username in accounts
-        assert accounts[username]["login"] == login
         assert accounts[username]["password"] == password
         assert accounts[username]["token"] is not None
 
@@ -189,28 +185,10 @@ class TestRegisterManagement:
     ):
         accounts = open_accounts_dict
         username = "l1"
-        login = "testlogin21"
         password = "testpassword453"
         with pytest.raises(ValueError) as exc_info:
-            register_acc(
-                username=username, login=login, password=password, accounts=accounts
-            )
+            register_acc(username=username, password=password, accounts=accounts)
             assert str(exc_info.value) == "Username must be in range 6-15."
-        assert username not in accounts
-
-    def test_register_acc_return_false_and_error_message_if_login_invalid(
-        self, open_accounts_dict
-    ):
-        accounts = open_accounts_dict
-        username = "testusername44"
-        login = "1"
-        password = "testpassword453"
-
-        with pytest.raises(ValueError) as exc_info:
-            register_acc(
-                username=username, login=login, password=password, accounts=accounts
-            )
-            assert str(exc_info.value) == "Login needs to be in range 6-15."
         assert username not in accounts
 
     def test_register_acc_return_false_and_error_message_if_password_invalid(
@@ -218,12 +196,9 @@ class TestRegisterManagement:
     ):
         accounts = open_accounts_dict
         username = "testusername44"
-        login = "testlogin21"
         password = "1"
         with pytest.raises(ValueError) as exc_info:
-            register_acc(
-                username=username, login=login, password=password, accounts=accounts
-            )
+            register_acc(username=username, password=password, accounts=accounts)
             assert str(exc_info.value) == "Password must be in range 8-19."
         assert username not in accounts
 

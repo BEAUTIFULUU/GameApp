@@ -2,7 +2,6 @@ import pytest
 from management_services.read_write_users_data_functions import read_data_from_file
 from validation_services.validate_registration import (
     validate_username,
-    validate_login,
     validate_password,
 )
 
@@ -57,66 +56,6 @@ class TestRegisterValidation:
         with pytest.raises(ValueError) as exc_info:
             validate_username(username=username, accounts_file_dct=accounts_dict)
             assert str(exc_info) == "Username already exists."
-
-    def test_validate_login_return_none_if_login_valid(self, open_accounts_dict):
-        accounts_dict = open_accounts_dict
-        login = "validlogin1"
-        result = validate_login(
-            user_login=login, username="1234", accounts_file_dct=accounts_dict
-        )
-        assert result is None
-
-    def test_validate_login_return_message_if_login_too_short(self, open_accounts_dict):
-        accounts_dict = open_accounts_dict
-        login = "12345"
-        with pytest.raises(ValueError) as exc_info:
-            validate_login(
-                user_login=login, username="12345", accounts_file_dct=accounts_dict
-            )
-            assert str(exc_info) == "Login must be in range 6-15."
-
-    def test_validate_login_return_message_if_login_too_long(self, open_accounts_dict):
-        accounts_dict = open_accounts_dict
-        login = "1234567891234567889"
-        with pytest.raises(ValueError) as exc_info:
-            validate_login(
-                user_login=login, username="54321", accounts_file_dct=accounts_dict
-            )
-            assert str(exc_info) == "Login must be in range 6-15."
-
-    def test_validate_login_return_message_if_digits_sum_in_login_too_small(
-        self, open_accounts_dict
-    ):
-        accounts_dict = open_accounts_dict
-        login = "testlogin"
-        with pytest.raises(ValueError) as exc_info:
-            validate_login(
-                user_login=login, username="12345", accounts_file_dct=accounts_dict
-            )
-            assert str(exc_info) == "Login must have at least 1 digit."
-
-    def test_validate_login_return_message_if_login_in_accounts_dict(
-        self, open_accounts_dict
-    ):
-        accounts_dict = open_accounts_dict
-        login = "testlogin12"
-        with pytest.raises(ValueError) as exc_info:
-            validate_login(
-                user_login=login, username="12345", accounts_file_dct=accounts_dict
-            )
-            assert str(exc_info) == "Login already exists."
-
-    def test_validate_login_return_message_if_login_and_username_are_the_same(
-        self, open_accounts_dict
-    ):
-        accounts_dict = open_accounts_dict
-        login = "testlogin123"
-        username = "testlogin123"
-        with pytest.raises(ValueError) as exc_info:
-            validate_login(
-                user_login=login, username=username, accounts_file_dct=accounts_dict
-            )
-            assert str(exc_info) == "Login needs to be different by username."
 
     def test_validate_password_return_none_if_password_valid(self, open_accounts_dict):
         accounts_dict = open_accounts_dict
