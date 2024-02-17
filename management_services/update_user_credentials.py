@@ -13,10 +13,7 @@ def update_username_in_acc_dict(
     accounts: dict[str, dict],
     records: dict[str, dict],
 ) -> ValueError | None:
-    login = accounts[username].get("login")
-    result = validate_new_username(
-        new_username=new_username, login=login, accounts=accounts
-    )
+    result = validate_new_username(new_username=new_username, accounts=accounts)
     if result is not None:
         return result
 

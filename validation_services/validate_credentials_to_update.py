@@ -1,5 +1,5 @@
 def validate_new_username(
-    new_username: str, login: str, accounts: dict[str, dict]
+    new_username: str, accounts: dict[str, dict]
 ) -> ValueError | None:
     min_digits = 2
 
@@ -11,9 +11,6 @@ def validate_new_username(
 
     elif new_username in accounts:
         raise ValueError("Username already exists.")
-
-    elif new_username == login:
-        raise ValueError("Username needs to be different from login.")
 
     else:
         return None
