@@ -6,7 +6,10 @@ from management_services.game_records_management import (
 )
 from management_services.login_acc import login_into_acc
 from management_services.register_acc import register_acc
-from management_services.update_user_credentials import update_username_in_acc_dict
+from management_services.update_user_credentials import (
+    update_username_in_acc_dict,
+    update_password_in_acc_dict,
+)
 
 
 @pytest.fixture
@@ -180,9 +183,7 @@ class TestRegisterManagement:
         assert accounts[username]["password"] == password
         assert accounts[username]["token"] is not None
 
-    def test_register_acc_return_false_and_error_message_if_username_invalid(
-        self, open_accounts_dict
-    ):
+    def test_register_acc_raise_exception_if_username_invalid(self, open_accounts_dict):
         accounts = open_accounts_dict
         username = "l1"
         password = "testpassword453"
@@ -191,9 +192,7 @@ class TestRegisterManagement:
             assert str(exc_info.value) == "Username must be in range 6-15."
         assert username not in accounts
 
-    def test_register_acc_return_false_and_error_message_if_password_invalid(
-        self, open_accounts_dict
-    ):
+    def test_register_acc_raise_exception_if_password_invalid(self, open_accounts_dict):
         accounts = open_accounts_dict
         username = "testusername44"
         password = "1"
@@ -204,7 +203,7 @@ class TestRegisterManagement:
 
 
 class TestUpdateCredentialsManagement:
-    def test_update_username_in_acc_dict_return_true_and_message_if_username_valid(
+    def test_update_username_in_acc_dict_return_none_e_if_username_valid(
         self, open_accounts_dict, open_records_dict
     ):
         accounts = open_accounts_dict
@@ -222,7 +221,7 @@ class TestUpdateCredentialsManagement:
         assert new_username in accounts
         assert username not in accounts
 
-    def test_update_username_in_acc_dict_return_false_and_message_if_username_is_invalid(
+    def test_update_username_in_acc_dict_raise_error_if_username_is_invalid(
         self, open_accounts_dict, open_records_dict
     ):
         accounts = open_accounts_dict
@@ -241,3 +240,30 @@ class TestUpdateCredentialsManagement:
 
         assert new_username not in accounts
         assert username in accounts
+
+    def test_update_password_in_acc_dict_return_none_if_password_is_valid(
+        self, open_accounts_dict
+    ):
+        accounts = open_accounts_dict
+        new_password = "testpassword543"
+        username = "testusername55"
+        assert username in accounts
+        result = update_password_in_acc_dict(
+            new_password=new_password, username=username, accounts=accounts
+        )
+        assert result is None
+        assert accounts[username]["password"] == new_password
+
+    def test_update_password_in_acc_dict_raise_error_if_password_invalid(
+        self, open_accounts_dict
+    ):
+        accounts = open_accounts_dict
+        new_password = "1"
+        username = "testusername55"
+        assert username in accounts
+        with pytest.raises(ValueError) as exc_info:
+            update_password_in_acc_dict(
+                new_password=new_password, username=username, accounts=accounts
+            )
+            assert str(exc_info.value) == "Password must be in range 8-19."
+        assert accounts[username]["password"] != new_password
