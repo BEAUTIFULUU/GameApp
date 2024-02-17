@@ -12,7 +12,10 @@ from management_services.game_records_management import (
     update_game_record,
     get_user_game_records,
 )
-from management_services.update_user_credentials import update_username_in_acc_dict
+from management_services.update_user_credentials import (
+    update_username_in_acc_dict,
+    update_password_in_acc_dict,
+)
 
 
 def _handle_user_login(
@@ -102,6 +105,20 @@ def _handle_update_username(
     return result
 
 
+def _handle_update_password(
+    new_password: str, username: str, accounts: dict[str, dict]
+):
+    result = update_password_in_acc_dict(
+        new_password=new_password,
+        username=username,
+        accounts=accounts,
+    )
+    if result is None:
+        write_data_to_file(data_dict=accounts, filename="users_data/accounts.json")
+        return "Password changed."
+    return result
+
+
 def start_app() -> None:
     while True:
         accounts = read_data_from_file(
@@ -173,6 +190,19 @@ def start_app() -> None:
                                 )
                                 print(update_message)
                                 log_username = new_username
+                            except ValueError as e:
+                                print(f"Error: {e}")
+                                continue
+
+                        elif update_choice == 2:
+                            new_password = input("Enter new password: ")
+                            try:
+                                update_message = _handle_update_password(
+                                    new_password=new_password,
+                                    username=log_username,
+                                    accounts=accounts,
+                                )
+                                print(update_message)
                             except ValueError as e:
                                 print(f"Error: {e}")
                                 continue

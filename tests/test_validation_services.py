@@ -1,6 +1,6 @@
 import pytest
 from management_services.read_write_users_data_functions import read_data_from_file
-from validation_services.validate_registration import (
+from validation_services.validate_user_credentials import (
     validate_username,
     validate_password,
 )

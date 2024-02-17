@@ -1,5 +1,5 @@
 import uuid
-from validation_services.validate_registration import (
+from validation_services.validate_user_credentials import (
     validate_username,
     validate_password,
 )
