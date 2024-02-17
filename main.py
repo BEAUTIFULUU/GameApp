@@ -19,7 +19,7 @@ from management_services.update_user_credentials import (
 
 
 def _handle_user_login(
-        username: str, password: str, accounts: dict[str, dict]
+    username: str, password: str, accounts: dict[str, dict]
 ) -> Tuple[str, bool]:
     login_result = login_into_acc(
         username=username, password=password, accounts=accounts
@@ -31,7 +31,7 @@ def _handle_user_login(
 
 
 def _handle_user_registration(
-        username: str, password: str, accounts: dict[str, str]
+    username: str, password: str, accounts: dict[str, str]
 ) -> ValueError | str:
     register_result = register_acc(
         username=username,
@@ -51,7 +51,7 @@ def _handle_user_registration(
 
 
 def _handle_guess_game_actions(
-        username: str, user_records: dict[str, dict], first_num: int, second_num: int
+    username: str, user_records: dict[str, dict], first_num: int, second_num: int
 ) -> str:
     game_score = number_guess_game(first_num=first_num, second_num=second_num)
     update_result = update_game_record(
@@ -71,7 +71,7 @@ def _handle_guess_game_actions(
 
 
 def _handle_get_user_records(
-        username: str, user_records: dict[str, dict]
+    username: str, user_records: dict[str, dict]
 ) -> str | dict[str, dict]:
     user_records_result = get_user_game_records(
         username=username, user_records=user_records
@@ -84,10 +84,10 @@ def _handle_get_user_records(
 
 
 def _handle_update_username(
-        username: str,
-        new_username: str,
-        accounts: dict[str, dict],
-        records: dict[str, dict],
+    username: str,
+    new_username: str,
+    accounts: dict[str, dict],
+    records: dict[str, dict],
 ) -> ValueError | str:
     result = update_username_in_acc_dict(
         username=username, new_username=new_username, accounts=accounts, records=records
@@ -106,7 +106,7 @@ def _handle_update_username(
 
 
 def _handle_update_password(
-        new_password: str, username: str, accounts: dict[str, dict]
+    new_password: str, username: str, accounts: dict[str, dict]
 ):
     result = update_password_in_acc_dict(
         new_password=new_password,
@@ -186,9 +186,7 @@ def start_app() -> None:
                 if user_game_choice == 1:
                     first_num = int(input("Select number from 1 to 100: "))
                     second_num = int(
-                        input(
-                            "Select number from 1 to 100 bigger than the first one: "
-                        )
+                        input("Select number from 1 to 100 bigger than the first one: ")
                     )
                     game_score = _handle_guess_game_actions(
                         username=log_username,
@@ -230,6 +228,7 @@ def start_app() -> None:
                             accounts=accounts,
                         )
                         print(update_message)
+
                     except ValueError as e:
                         print(f"Error: {e}")
                         continue
@@ -247,4 +246,3 @@ def start_app() -> None:
 
 
 start_app()
-
