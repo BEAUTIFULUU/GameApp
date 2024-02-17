@@ -19,7 +19,7 @@ from management_services.update_user_credentials import (
 
 
 def _handle_user_login(
-    username: str, password: str, accounts: dict[str, dict]
+        username: str, password: str, accounts: dict[str, dict]
 ) -> Tuple[str, bool]:
     login_result = login_into_acc(
         username=username, password=password, accounts=accounts
@@ -31,7 +31,7 @@ def _handle_user_login(
 
 
 def _handle_user_registration(
-    username: str, password: str, accounts: dict[str, str]
+        username: str, password: str, accounts: dict[str, str]
 ) -> ValueError | str:
     register_result = register_acc(
         username=username,
@@ -51,7 +51,7 @@ def _handle_user_registration(
 
 
 def _handle_guess_game_actions(
-    username: str, user_records: dict[str, dict], first_num: int, second_num: int
+        username: str, user_records: dict[str, dict], first_num: int, second_num: int
 ) -> str:
     game_score = number_guess_game(first_num=first_num, second_num=second_num)
     update_result = update_game_record(
@@ -71,7 +71,7 @@ def _handle_guess_game_actions(
 
 
 def _handle_get_user_records(
-    username: str, user_records: dict[str, dict]
+        username: str, user_records: dict[str, dict]
 ) -> str | dict[str, dict]:
     user_records_result = get_user_game_records(
         username=username, user_records=user_records
@@ -84,10 +84,10 @@ def _handle_get_user_records(
 
 
 def _handle_update_username(
-    username: str,
-    new_username: str,
-    accounts: dict[str, dict],
-    records: dict[str, dict],
+        username: str,
+        new_username: str,
+        accounts: dict[str, dict],
+        records: dict[str, dict],
 ) -> ValueError | str:
     result = update_username_in_acc_dict(
         username=username, new_username=new_username, accounts=accounts, records=records
@@ -106,7 +106,7 @@ def _handle_update_username(
 
 
 def _handle_update_password(
-    new_password: str, username: str, accounts: dict[str, dict]
+        new_password: str, username: str, accounts: dict[str, dict]
 ):
     result = update_password_in_acc_dict(
         new_password=new_password,
@@ -120,124 +120,131 @@ def _handle_update_password(
 
 
 def start_app() -> None:
+    user_state = "not_logged_in"
+    log_username = None
+    accounts = None
+
     while True:
-        accounts = read_data_from_file(
-            filename="users_data/accounts.json",
-        )
-        auth_user_decision_str = get_valid_input(
-            "1 - Login, 2 - Register, 0 - Exit: ",
-            "Invalid input. Please enter a number.",
-        )
-        auth_user_decision = int(auth_user_decision_str)
-
-        if auth_user_decision == 1:
-            log_username = input("Enter username: ")
-            log_password = input("Enter password: ")
-            login_msg, login_result = _handle_user_login(
-                username=log_username, password=log_password, accounts=accounts
+        if user_state == "not_logged_in":
+            accounts = read_data_from_file(
+                filename="users_data/accounts.json",
             )
-            print(login_msg)
+            auth_user_decision_str = get_valid_input(
+                "1 - Login, 2 - Register, 0 - Exit: ",
+                "Invalid input. Please enter a number.",
+            )
+            auth_user_decision = int(auth_user_decision_str)
 
-            if login_result:
-                while True:
-                    user_records = read_data_from_file(
-                        filename="users_data/personal_game_records.json",
-                    )
-                    logged_usr_decision_str = get_valid_input(
-                        "1 - Games, 2 - Personal games records, 3 - Change account credentials, 4 - Exit: ",
-                        "Invalid input. Please enter a number.",
-                    )
-                    logged_usr_decision = int(logged_usr_decision_str)
-
-                    if logged_usr_decision == 1:
-                        user_game_choice_str = get_valid_input(
-                            "1 - Guess Number Game, 2 - x, 3 - x: ",
-                            "Invalid input. Please enter a number.",
-                        )
-                        user_game_choice = int(user_game_choice_str)
-
-                        if user_game_choice == 1:
-                            first_num = int(input("Select number from 1 to 100: "))
-                            second_num = int(
-                                input(
-                                    "Select number from 1 to 100 bigger than the first one: "
-                                )
-                            )
-                            game_score = _handle_guess_game_actions(
-                                username=log_username,
-                                user_records=user_records,
-                                first_num=first_num,
-                                second_num=second_num,
-                            )
-
-                            print(game_score)
-                            continue
-
-                    elif logged_usr_decision == 3:
-                        change_credentials_choice = get_valid_input(
-                            prompt="1 - Change username, 2 - Change password, 3 - Exit: ",
-                            error_message="Invalid input. Please enter a number.",
-                        )
-                        update_choice = int(change_credentials_choice)
-                        if update_choice == 1:
-                            new_username = input("Enter new username: ")
-                            try:
-                                update_message = _handle_update_username(
-                                    username=log_username,
-                                    new_username=new_username,
-                                    accounts=accounts,
-                                    records=user_records,
-                                )
-                                print(update_message)
-                                log_username = new_username
-                            except ValueError as e:
-                                print(f"Error: {e}")
-                                continue
-
-                        elif update_choice == 2:
-                            new_password = input("Enter new password: ")
-                            try:
-                                update_message = _handle_update_password(
-                                    new_password=new_password,
-                                    username=log_username,
-                                    accounts=accounts,
-                                )
-                                print(update_message)
-                            except ValueError as e:
-                                print(f"Error: {e}")
-                                continue
-
-                    elif logged_usr_decision == 4:
-                        print("Exiting...")
-                        break
-
-                    elif logged_usr_decision == 2:
-                        user_records = _handle_get_user_records(
-                            username=log_username, user_records=user_records
-                        )
-                        print(user_records)
-
-            else:
-                continue
-
-        elif auth_user_decision == 2:
-            reg_username = input("Enter username: ")
-            reg_password = input("Enter password: ")
-            try:
-                register_result = _handle_user_registration(
-                    username=reg_username,
-                    password=reg_password,
-                    accounts=accounts,
+            if auth_user_decision == 1:
+                log_username = input("Enter username: ")
+                log_password = input("Enter password: ")
+                login_msg, login_result = _handle_user_login(
+                    username=log_username, password=log_password, accounts=accounts
                 )
-                print(register_result)
+                print(login_msg)
 
-            except ValueError as e:
-                print(f"Error: {e}")
+                if login_result:
+                    user_state = "logged_in"
                 continue
 
-        elif auth_user_decision == 0:
-            print("Exiting...")
-            break
+            elif auth_user_decision == 2:
+                reg_username = input("Enter username: ")
+                reg_password = input("Enter password: ")
+                try:
+                    register_result = _handle_user_registration(
+                        username=reg_username,
+                        password=reg_password,
+                        accounts=accounts,
+                    )
+                    print(register_result)
+
+                except ValueError as e:
+                    print(f"Error: {e}")
+                    continue
+
+            elif auth_user_decision == 0:
+                print("Exiting...")
+                break
+
+        elif user_state == "logged_in":
+            user_records = read_data_from_file(
+                filename="users_data/personal_game_records.json",
+            )
+            logged_usr_decision_str = get_valid_input(
+                "1 - Games, 2 - Personal games records, 3 - Change account credentials, 4 - Exit: ",
+                "Invalid input. Please enter a number.",
+            )
+            logged_usr_decision = int(logged_usr_decision_str)
+
+            if logged_usr_decision == 1:
+                user_game_choice_str = get_valid_input(
+                    "1 - Guess Number Game, 2 - x, 3 - x: ",
+                    "Invalid input. Please enter a number.",
+                )
+                user_game_choice = int(user_game_choice_str)
+
+                if user_game_choice == 1:
+                    first_num = int(input("Select number from 1 to 100: "))
+                    second_num = int(
+                        input(
+                            "Select number from 1 to 100 bigger than the first one: "
+                        )
+                    )
+                    game_score = _handle_guess_game_actions(
+                        username=log_username,
+                        user_records=user_records,
+                        first_num=first_num,
+                        second_num=second_num,
+                    )
+
+                    print(game_score)
+                    continue
+
+            elif logged_usr_decision == 3:
+                change_credentials_choice = get_valid_input(
+                    prompt="1 - Change username, 2 - Change password, 3 - Exit: ",
+                    error_message="Invalid input. Please enter a number.",
+                )
+                update_choice = int(change_credentials_choice)
+                if update_choice == 1:
+                    new_username = input("Enter new username: ")
+                    try:
+                        update_message = _handle_update_username(
+                            username=log_username,
+                            new_username=new_username,
+                            accounts=accounts,
+                            records=user_records,
+                        )
+                        print(update_message)
+                        log_username = new_username
+                    except ValueError as e:
+                        print(f"Error: {e}")
+                        continue
+
+                elif update_choice == 2:
+                    new_password = input("Enter new password: ")
+                    try:
+                        update_message = _handle_update_password(
+                            new_password=new_password,
+                            username=log_username,
+                            accounts=accounts,
+                        )
+                        print(update_message)
+                    except ValueError as e:
+                        print(f"Error: {e}")
+                        continue
+
+            elif logged_usr_decision == 4:
+                print("Exiting...")
+                user_state = "not_logged_in"
+                continue
+
+            elif logged_usr_decision == 2:
+                user_records = _handle_get_user_records(
+                    username=log_username, user_records=user_records
+                )
+                print(user_records)
 
 
 start_app()
+
